@@ -14,6 +14,9 @@ option(BUILD_TESTS "Build tests" ON)
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
+hunter_add_package(Boost)
+find_package(Boost CONFIG REQUIRED)
+
 add_library(
     ${PROJECT_NAME} 
     ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}/${PROJECT_NAME}.cpp
@@ -23,6 +26,10 @@ target_include_directories(
     ${PROJECT_NAME}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(
+    ${PROJECT_NAME}
+    Boost::boost
 )
 
 include(cmake/packaging.cmake)
