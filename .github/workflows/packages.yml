@@ -1,0 +1,27 @@
+name: Packages
+on:
+  workflow_run:
+    workflows: [Build And Test]
+    types:
+      - completed
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: CMake Config
+      run: cmake -S. -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+    - name: CMake Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} 
+    - name: CMake Source Package
+      run: cmake --build ${{github.workspace}}/build --target package_source
+    - name: Source Package Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: sources
+        path: ${{github.workspace}}/build/*Source.tar.gz
