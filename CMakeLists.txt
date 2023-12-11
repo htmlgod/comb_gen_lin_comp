@@ -1,13 +1,20 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 20)
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
+    set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+if (CMAKE_SYSTEM MATCHES Windows)
+    set(CMAKE_CXX_FLAGS_RELEASE "/O2")
+endif()
+
+if (CMAKE_SYSTEM MATCHES Linux)
+    set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+endif()
+if (CMAKE_SYSTEM MATCHES Darwin)
+    set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+endif()
 
 # hunter module, keep up-to-date
 include("cmake/HunterGate.cmake")
@@ -24,6 +31,7 @@ find_package(GTest CONFIG REQUIRED)
 
 hunter_add_package(Boost)
 find_package(Boost CONFIG REQUIRED)
+find_package(OpenMP)
 
 add_library(
     ${PROJECT_NAME} 
@@ -37,8 +45,12 @@ target_include_directories(
 )
 target_link_libraries(
     ${PROJECT_NAME}
+    PRIVATE
     Boost::boost
 )
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
+endif()
 
 include(cmake/packaging.cmake)
 if(BUILD_TESTS)
