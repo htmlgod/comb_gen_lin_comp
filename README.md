@@ -1,24 +1,15 @@
 # comb_gen_lin_comp
 
-## Testing
 
-Build tests:
+## Build tests:
 ```
-# template is for header-only library by default
 cmake -S . -B_build
 cmake --build _build
 ```
 
-Run tests:
+## Run tests:
 ```
-cd _build && ctest
-# or 
-cmake --build _build --target hello_test
-./_build/hello_test
-```
-
-## Usage
-
-```cpp
-
+./_build/comb_gen_lin_comp_tests
+# or on win
+./_build/Debug/comb_gen_lin_comp_tests.exe
 ```
