@@ -12,7 +12,7 @@
 
 namespace {
     bool is_power_of_2(size_t num) {
-        return (num & (num - 1)) == 0;
+        return (num & (num - 1)) == 0; // http://www.graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
     }
     size_t get_linear_complexity_cg(const std::string& gamma) {
         size_t L = 0;
